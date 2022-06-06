@@ -1,12 +1,17 @@
-<script>
+<script type="ts">
   import { getContext } from "svelte";
-  export let href;
+  import type Settings from "./Settings";
+
+  export let autoclose = true;
+  export let href : string;
+
+  $: autocloseAttribute = autoclose === false ? "false" : null;
   
-  const settings = getContext("settings");
+  const settings : Settings = getContext("settings");
   let contentClass = settings.ItemContent.Class.join(' ');
 </script>
 
-<li class="context-menu-item">
+<li class="context-menu-item" data-autoclose={autocloseAttribute}>
   {#if href}
     <a class={contentClass} href={href} {...$$restProps}>
       <slot></slot>

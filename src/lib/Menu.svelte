@@ -1,4 +1,6 @@
 <script type="ts">
+  type MenuPosition = [number, number] | null;
+
   import { onDestroy, onMount, setContext } from "svelte";
 
   import type { ContextMenuMouseEvent } from "./ContextMenuMouseEvent";
@@ -10,13 +12,13 @@
   export let settings = new Settings();
   setContext("settings", settings);
 
-  let menuPosition = null;
+  let menuPosition: MenuPosition = null;
   $: menuClass = menuPosition ? settings.Menu.Class.concat(settings.Menu.VisibleClass).join(' ') :
     settings.Menu.Class.join(' ');
   $: menuStyle = computeMenuStyle(menuPosition);
 
-  let portal;
-  let ref;
+  let portal : HTMLDivElement;
+  let ref : any;
 
   currentMenu.subscribe(value => {
     // If the menu is currently active, but another menu has popped up
@@ -26,7 +28,7 @@
     }
   });
 
-  function computeMenuStyle(position) {
+  function computeMenuStyle(position: MenuPosition) {
     if (!position) return "";
 
     const [clientX, clientY] = position;
@@ -42,16 +44,19 @@
   /**
    * Given a click event path, get the immediate child of the ContextMenu
    * that was clicked
+   * @param {EventTarget[]} path
    */
-  function getImmediateChild(path) {
+  function getImmediateChild(path?: EventTarget[]) {
+    if (path === null || path === undefined) return null;
+
     const ctxMenuIdx = path.indexOf(ref);
-    return path[ctxMenuIdx - 1];
+    return path[ctxMenuIdx - 1] as HTMLElement;
   }
 
   function close(e?: ContextMenuMouseEvent) {
     if (e?.contextMenuHandled) return;
 
-    const autoclose = getImmediateChild(e.composedPath())?.dataset['autoclose'];
+    const autoclose = getImmediateChild(e?.composedPath())?.dataset['autoclose'];
     if (autoclose === "false")
       return;
 
@@ -61,11 +66,15 @@
     document.body.removeEventListener("contextmenu", close);
   }
 
+  /**
+   * Create an event handler, for mouse events, that
+   * activates the context menu
+   */
   export function createHandler() {
-    return (event) => show(event);
+    return (event: ContextMenuMouseEvent) => show(event);
   }
 
-  export function show(clickEvent) {
+  export function show(clickEvent: ContextMenuMouseEvent) {
     const { clientX, clientY } = clickEvent;
     clickEvent.contextMenuHandled = true;
 
@@ -99,6 +108,7 @@
     portal = document.createElement('div');
     portal.className="context-menu-portal";
     document.body.append(portal);
+    console.log(document, portal);
     portal.appendChild(ref);
   });
 
