@@ -1,0 +1,12 @@
+{
+  "extends": "@tsconfig/svelte/tsconfig.json",
+  "include": ["src/**/*", "src/node_modules"],
+  "exclude": ["node_modules/*", "__sapper__/*", "public/*"],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "svelte-context-menu": ["src/index"]
+    },
+    "types": ["node", "svelte"],
+  }
+}

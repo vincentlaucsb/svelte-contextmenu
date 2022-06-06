@@ -1,0 +1,29 @@
+{
+  "name": "svelte-context-menu",
+  "svelte": "src/index.js",
+  "module": "dist/index.mjs",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "rollup -c",
+    "prepublishOnly": "npm run build"
+  },
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^9.0.0",
+    "@rollup/plugin-typescript": "^8.3.2",
+    "@tsconfig/svelte": "^3.0.0",
+    "rollup": "^2.0.0",
+    "rollup-plugin-svelte": "^7.0.0",
+    "svelte": "^3.5.0",
+    "svelte-check": "^2.7.2",
+    "svelte-preprocess": "^4.10.7",
+    "typescript": "^4.7.3"
+  },
+  "keywords": [
+    "svelte"
+  ],
+  "files": [
+    "src",
+    "dist"
+  ]
+}
