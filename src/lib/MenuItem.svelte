@@ -3,7 +3,7 @@
   import type Settings from "./Settings";
 
   export let autoclose = true;
-  export let href : string;
+  export let href : string = "";
 
   $: autocloseAttribute = autoclose === false ? "false" : null;
   
@@ -17,7 +17,7 @@
       <slot></slot>
     </a>
   {:else}
-    <button class={contentClass} {...$$restProps}>
+    <button class={contentClass} {...$$restProps} on:click>
       <slot></slot>
     </button>
   {/if}

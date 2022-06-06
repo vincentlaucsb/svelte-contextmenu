@@ -3,9 +3,11 @@
 /** @typedef {typeof __propDef.slots}  MenuItemSlots */
 export default class MenuItem extends SvelteComponentTyped<{
     [x: string]: any;
-    autoclose: boolean;
-    href: string;
+    autoclose?: boolean | undefined;
+    href?: string | undefined;
 }, {
+    click: MouseEvent;
+} & {
     [evt: string]: CustomEvent<any>;
 }, {
     default: {};
@@ -18,10 +20,12 @@ import { SvelteComponentTyped } from "svelte";
 declare const __propDef: {
     props: {
         [x: string]: any;
-        autoclose: boolean;
-        href: string;
+        autoclose?: boolean | undefined;
+        href?: string | undefined;
     };
     events: {
+        click: MouseEvent;
+    } & {
         [evt: string]: CustomEvent<any>;
     };
     slots: {

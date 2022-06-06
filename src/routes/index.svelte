@@ -63,6 +63,11 @@
   <Item href="https://youtu.be/PvF9PAxe5Ng?t=7" target={linkTarget}>⛽ Give me fuel</Item>
   <Item href="https://youtu.be/PvF9PAxe5Ng?t=8" target={linkTarget}>🔥 Give me fire</Item>
   <Item href="https://youtu.be/PvF9PAxe5Ng?t=9" target={linkTarget}>🧞‍♀️ Give me that which I desire</Item>
+  <Item on:click={() => {
+    alert("YEEEAAAAH!");
+  }}>
+    🤘 OOOH!
+  </Item>
 </ContextMenu>
 
 <style>
