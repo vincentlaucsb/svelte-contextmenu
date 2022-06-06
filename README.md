@@ -4,7 +4,9 @@ A simple, no-frills context menu that works out of the box with Bootstrap but al
 
 By default, the context menu will appear to the bottom and right of where a click occurred. However, it automatically repositions itself if it overflows.
 
-### Node Package Manager
+[**Live Demo**](https://vincentlaucsb.github.io/context-menu/public/)
+
+### Install
 https://www.npmjs.com/package/svelte-contextmenu
 
 `npm install --save-dev svelte-contextmenu`
