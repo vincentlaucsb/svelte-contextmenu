@@ -1,5 +1,5 @@
 {
-  "name": "svelte-context-menu",
+  "name": "svelte-contextmenu",
   "version": "1.0.0",
   "scripts": {
     "dev": "svelte-kit dev",
