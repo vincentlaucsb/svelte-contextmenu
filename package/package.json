@@ -1,13 +1,10 @@
 {
   "name": "svelte-context-menu",
+  "version": "1.0.0",
   "devDependencies": {
-    "@rollup/plugin-node-resolve": "^9.0.0",
-    "@rollup/plugin-typescript": "^8.3.2",
     "@sveltejs/adapter-static": "^1.0.0-next.34",
     "@sveltejs/kit": "^1.0.0-next.348",
     "@tsconfig/svelte": "^3.0.0",
-    "rollup": "^2.0.0",
-    "rollup-plugin-svelte": "^7.0.0",
     "svelte": "^3.5.0",
     "svelte-check": "^2.7.2",
     "svelte-preprocess": "^4.10.7",
@@ -17,10 +14,6 @@
   },
   "keywords": [
     "svelte"
-  ],
-  "files": [
-    "src",
-    "dist"
   ],
   "type": "module",
   "exports": {
