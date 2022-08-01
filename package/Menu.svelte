@@ -1,6 +1,15 @@
-<script>import { onDestroy, onMount, setContext } from "svelte";
+<script>/**
+ * Once a menu has been made visible, these events will trigger
+ * the close() function
+ */
+const CLOSE_LISTENERS = {
+    "click": document.body,
+    "contextmenu": document.body,
+    "scroll": document
+};
+import { onDestroy, onMount, setContext } from "svelte";
 import Settings from "./Settings";
-import { createStyleString } from "./utilities";
+import { createStyleString, findParentWithScroll } from "./utilities";
 import { currentMenu } from "./stores";
 /** Settings for this menu */
 export let settings = new Settings();
@@ -9,9 +18,9 @@ let menuPosition = null;
 $: menuClass = menuPosition ? settings.Menu.Class.concat(settings.Menu.VisibleClass).join(' ') :
     settings.Menu.Class.join(' ');
 $: menuStyle = computeMenuStyle(menuPosition);
-let portal;
+let currentParentContainer = null;
 let ref;
-currentMenu.subscribe(value => {
+const unsub = currentMenu.subscribe(value => {
     // If the menu is currently active, but another menu has popped up
     // then close this menu
     if ((menuPosition) && (value !== ref)) {
@@ -21,11 +30,11 @@ currentMenu.subscribe(value => {
 function computeMenuStyle(position) {
     if (!position)
         return "";
-    const [clientX, clientY] = position;
+    const [posX, posY] = position;
     return createStyleString({
         "position": "absolute",
-        "left": `${clientX}px`,
-        "top": `${clientY}px`,
+        "left": `${posX}px`,
+        "top": `${posY}px`,
         "z-index": 9999
     });
 }
@@ -47,8 +56,14 @@ function close(e) {
     if (autoclose === "false")
         return;
     menuPosition = null;
-    document.body.removeEventListener("click", close);
-    document.body.removeEventListener("contextmenu", close);
+    Object.keys(CLOSE_LISTENERS).forEach((eventName) => {
+        const target = CLOSE_LISTENERS[eventName];
+        target.removeEventListener(eventName, close);
+    });
+    if (currentParentContainer !== null) {
+        currentParentContainer.removeEventListener("scroll", close);
+        currentParentContainer = null;
+    }
 }
 /**
  * Create an event handler, for mouse events, that
@@ -58,9 +73,9 @@ export function createHandler() {
     return (event) => show(event);
 }
 export function show(clickEvent) {
-    const { clientX, clientY } = clickEvent;
+    const { pageX, pageY } = clickEvent;
     clickEvent.contextMenuHandled = true;
-    menuPosition = [clientX, clientY];
+    menuPosition = [pageX, pageY];
     /*
      * This is a hack so we can get dimensions of the menu.
      * This will not cause the menu to render.
@@ -68,29 +83,42 @@ export function show(clickEvent) {
      */
     ref.style = "display: block";
     let refDims = ref.getBoundingClientRect();
-    if (clientX + refDims.width > window.innerWidth) {
+    if (pageX + refDims.width > window.innerWidth) {
         // Will overflow to the right
-        menuPosition = [clientX - refDims.width, clientY];
+        menuPosition = [pageX - refDims.width, pageY];
     }
-    else if (clientY + refDims.height > window.innerHeight) {
-        menuPosition = [clientX, clientY - refDims.height];
+    else if (pageY + refDims.height > window.innerHeight) {
+        menuPosition = [pageX, pageY - refDims.height];
     }
     clickEvent.preventDefault();
     currentMenu.set(ref);
-    document.body.addEventListener("click", close);
-    document.body.addEventListener("contextmenu", close);
+    Object.keys(CLOSE_LISTENERS).forEach((eventName) => {
+        const target = CLOSE_LISTENERS[eventName];
+        target.addEventListener(eventName, close);
+    });
+    // If a parent container w/ custom scrolling exists, then 
+    // we attach a scroll listener there as well
+    currentParentContainer = findParentWithScroll(clickEvent);
+    if (currentParentContainer !== null) {
+        currentParentContainer.addEventListener("scroll", close);
+    }
 }
 onMount(() => {
-    portal = document.createElement('div');
-    portal.className = "context-menu-portal";
-    document.body.append(portal);
-    console.log(document, portal);
+    let portal = document.getElementById("context-menu-portal");
+    if (portal === null) {
+        portal = document.createElement('div');
+        portal.id = "context-menu-portal";
+        portal.setAttribute("style", createStyleString({
+            position: "absolute",
+            top: 0,
+            left: 0
+        }));
+        document.body.append(portal);
+    }
     portal.appendChild(ref);
 });
 onDestroy(() => {
-    if (ref !== null) {
-        portal.removeChild(ref);
-    }
+    unsub();
 });
 </script>
 

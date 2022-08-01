@@ -135,6 +135,11 @@
     if (portal === null) {
       portal = document.createElement('div');
       portal.id = "context-menu-portal";
+      portal.setAttribute("style", createStyleString({
+        position: "absolute",
+        top: 0,
+        left: 0
+      }));
       document.body.append(portal);
     }
 
