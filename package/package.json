@@ -23,8 +23,10 @@
     ".": "./index.js",
     "./Menu.svelte": "./Menu.svelte",
     "./MenuItem.svelte": "./MenuItem.svelte",
+    "./menuUtilities": "./menuUtilities.js",
     "./Settings": "./Settings.js",
     "./stores": "./stores.js",
+    "./Stylesheet": "./Stylesheet.js",
     "./utilities": "./utilities.js"
   },
   "svelte": "./index.js"

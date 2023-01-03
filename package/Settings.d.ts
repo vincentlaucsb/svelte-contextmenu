@@ -1,4 +1,8 @@
 declare class Settings {
+    /** Use Bootstrap 5 CSS styling */
+    static BootstrapCss(): Settings;
+    /** Use default CSS styling */
+    static DefaultCss(): Settings;
     Divider: {
         Class: string[];
     };
@@ -7,9 +11,6 @@ declare class Settings {
         VisibleClass: string[];
     };
     Item: {
-        Class: string[];
-    };
-    ItemContent: {
         Class: string[];
     };
 }

@@ -8,19 +8,26 @@ const CLOSE_LISTENERS = {
     "scroll": document
 };
 import { onDestroy, onMount, setContext } from "svelte";
+import { writable } from "svelte/store";
 import Settings from "./Settings";
 import { createStyleString, findParentWithScroll } from "./utilities";
-import { currentMenu } from "./stores";
-/** Settings for this menu */
-export let settings = new Settings();
-setContext("settings", settings);
+import { currentMenu, defaultSettings } from "./stores";
+import { getMenuClass } from "./menuUtilities";
+/** Menu Settings */
+export let settings = null;
+const finalSettings = writable(settings || $defaultSettings);
+$: {
+    // Update settings on change
+    $finalSettings = settings || $defaultSettings;
+    setContext("settings", finalSettings);
+}
+/** Menu State */
 let menuPosition = null;
-$: menuClass = menuPosition ? settings.Menu.Class.concat(settings.Menu.VisibleClass).join(' ') :
-    settings.Menu.Class.join(' ');
+$: menuClass = getMenuClass(menuPosition, $finalSettings);
 $: menuStyle = computeMenuStyle(menuPosition);
 let currentParentContainer = null;
 let ref;
-const unsub = currentMenu.subscribe(value => {
+const currentMenuUnsub = currentMenu.subscribe(value => {
     // If the menu is currently active, but another menu has popped up
     // then close this menu
     if ((menuPosition) && (value !== ref)) {
@@ -118,10 +125,34 @@ onMount(() => {
     portal.appendChild(ref);
 });
 onDestroy(() => {
-    unsub();
+    currentMenuUnsub();
 });
 </script>
 
 <ul class={menuClass} style={menuStyle} bind:this={ref}>
   <slot></slot>
 </ul>
+
+<style>
+  .context-menu-default {
+    --ctx-menu-background: #eeeeee;
+    --ctx-menu-border: 1px solid #aaaaaa;
+    --ctx-menu-border-radius: 0.25rem;
+    --ctx-menu-padding: 0.25rem 0;
+  }
+
+  .context-menu.context-menu-default {
+    background-color: var(--ctx-menu-background);
+    border: var(--ctx-menu-border);
+    border-radius: var(--ctx-menu-border-radius);
+    margin: 0;
+    padding: var(--ctx-menu-padding);
+    display: none;
+    list-style-type: none;
+    white-space: nowrap;
+  }
+  
+  .context-menu.context-menu-default.show {
+    display: initial;
+  }
+</style>

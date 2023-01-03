@@ -1,7 +1,5 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-
-  import ContextMenu, { Item, Divider, Settings } from "../lib";
+  import ContextMenu, { Item, Divider, Settings, useBootstrap, useDefaultStyles } from "../lib";
 
   let bootstrapEnabled = true;
   let openInNewTab : boolean;
@@ -9,20 +7,31 @@
   let boldMenu : ContextMenu;
   let menus = {};
 
-  const boldSettings = new Settings();
-  boldSettings.ItemContent.Class.push("fw-bold");
+  let boldSettings = bootstrapEnabled ? Settings.BootstrapCss() : Settings.DefaultCss();
+  $: {
+    boldSettings = bootstrapEnabled ? Settings.BootstrapCss() : Settings.DefaultCss();
+  }
+
+  boldSettings.Item.Class.push("fw-bold");
 
   $: linkTarget = openInNewTab ? "blank" : "";
 
   $: {
     if (bootstrapEnabled) {
-      document.getElementById("bootstrap")?.setAttribute(
+      document.getElementById("main-css")?.setAttribute(
         "href",
         "https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"
       );
+
+      useBootstrap();
     }
     else {
-      document.getElementById("bootstrap")?.setAttribute("href", "");
+      document.getElementById("main-css")?.setAttribute(
+        "href",
+        ""
+      );
+
+      useDefaultStyles();
     }
   }
 </script>
@@ -113,6 +122,7 @@
 <style>
   :global(body) {
     margin: 0;
+    font-family: sans-serif;
     display: grid;
     grid-template-columns: 250px 1fr;
   }
