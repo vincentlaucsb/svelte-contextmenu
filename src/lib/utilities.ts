@@ -20,10 +20,15 @@ export function createStyleString(style: {[key: string]: string | number}) {
  */
 export function findParentWithScroll(clickEvent: ContextMenuMouseEvent) {
   const target = clickEvent.target as HTMLElement;
+
   let current = target.parentElement;
   while (current !== null && current !== document.body) {
     const computedStyle = window.getComputedStyle(current);
-    if (computedStyle.overflowX === "scroll" || computedStyle.overflowY === "scroll") {
+    const canScroll = computedStyle.overflowX === "scroll" || computedStyle.overflowY === "scroll";
+    const isOverflown = (current.scrollHeight > current.offsetHeight) ||
+      (current.scrollWidth > current.offsetWidth);
+
+    if (canScroll || isOverflown) {
       return current;
     }
 

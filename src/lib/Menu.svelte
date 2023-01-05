@@ -19,7 +19,7 @@
   import Settings from "./Settings";
   import { createStyleString, findParentWithScroll } from "./utilities";
   import { currentMenu, defaultSettings } from "./stores";
-  import { getMenuClass } from "./menuUtilities";
+  import { computeMenuStyle, getMenuClass } from "./menuUtilities";
 
   /** Menu Settings */
   export let settings: Settings = null;
@@ -47,19 +47,6 @@
     }
   });
 
-  function computeMenuStyle(position: MenuPosition) {
-    if (!position) return "";
-
-    const [posX, posY] = position;
-
-    return createStyleString({
-      "position": "absolute",
-      "left": `${posX}px`,
-      "top": `${posY}px`,
-      "z-index": 9999
-    });
-  }
-
   /**
    * Given a click event path, get the immediate child of the ContextMenu
    * that was clicked
@@ -75,6 +62,8 @@
   function close(e?: ContextMenuMouseEvent) {
     if (e?.contextMenuHandled) return;
 
+    // Automatically close context menu if any child is clicked EXCEPT
+    // items with the "autoclose" attribute set to false
     const autoclose = getImmediateChild(e?.composedPath())?.dataset['autoclose'];
     if (autoclose === "false")
       return;
@@ -165,19 +154,12 @@
 </ul>
 
 <style>
-  .context-menu-default {
-    --ctx-menu-background: #eeeeee;
-    --ctx-menu-border: 1px solid #aaaaaa;
-    --ctx-menu-border-radius: 0.25rem;
-    --ctx-menu-padding: 0.25rem 0;
-  }
-
   .context-menu.context-menu-default {
-    background-color: var(--ctx-menu-background);
-    border: var(--ctx-menu-border);
-    border-radius: var(--ctx-menu-border-radius);
+    background-color: var(--ctx-menu-background, #eeeeee);
+    border: var(--ctx-menu-border, 1px solid #aaaaaa);
+    border-radius: var(--ctx-menu-border-radius, 0.25rem);
     margin: 0;
-    padding: var(--ctx-menu-padding);
+    padding: var(--ctx-menu-padding, 0.25rem 0);
     display: none;
     list-style-type: none;
     white-space: nowrap;

@@ -25,20 +25,15 @@
 </li>
 
 <style>
-  .context-menu-default {
-    --ctx-menu-hover-bg: #dddddd;
-    --ctx-menu-item-padding: 0.375rem 0.5rem;
-  }
-
   .context-menu-item.context-menu-default:hover {
-    background: var(--ctx-menu-hover-bg);
+    background: var(--ctx-menu-hover-bg, #dddddd);
   }
 
   .context-menu-item.context-menu-default {
     box-sizing: border-box;
     cursor: pointer;
     display: block;
-    padding: var(--ctx-menu-item-padding);
+    padding: var(--ctx-menu-item-padding, 0.375rem 0.5rem);
     width: 100%;
   }
 
