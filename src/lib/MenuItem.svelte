@@ -9,16 +9,17 @@
   $: autocloseAttribute = autoclose === false ? "false" : null;
   
   const settings : Writable<Settings> = getContext("settings");
-  $: contentClass = $settings.Item.Class.join(' ');
+
+  $: contentClass = [$$restProps.class, ...$settings.Item.Class].filter(_ => _).join(' ');
 </script>
 
 <li data-autoclose={autocloseAttribute}>
   {#if href}
-    <a class={contentClass} href={href} {...$$restProps}>
+    <a href={href} {...$$restProps} class={contentClass} >
       <slot></slot>
     </a>
   {:else}
-    <button class={contentClass} {...$$restProps} on:click>
+    <button {...$$restProps} class={contentClass} on:click>
       <slot></slot>
     </button>
   {/if}

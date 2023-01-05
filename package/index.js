@@ -13,4 +13,7 @@ function useDefaultStyles() {
 }
 
 export default Menu;
-export { Item, Divider, Settings, useBootstrap, useDefaultStyles };
+export {
+    Item, Divider, Settings,
+    defaultSettings, useBootstrap, useDefaultStyles
+};
