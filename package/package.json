@@ -1,6 +1,6 @@
 {
   "name": "svelte-contextmenu",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "devDependencies": {
     "@sveltejs/adapter-static": "^1.0.0-next.34",
     "@sveltejs/kit": "^1.0.0-next.348",
