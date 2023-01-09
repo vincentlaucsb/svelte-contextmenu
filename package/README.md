@@ -76,51 +76,67 @@ In most cases, the default styling can be changed to meet one's needs by definin
 CSS variables.
 
 ```css
-    :root {
-      --ctx-menu-background: var(--gray-10) !important;
-      --ctx-menu-border: 1px solid var(--gray-50) !important;
-      --ctx-menu-hover-bg: var(--gray-20) !important;
-    }
+:root {
+  --ctx-menu-background: #eeeeee;
+  --ctx-menu-border: 1px solid #aaaaaa;
+  --ctx-menu-border-radius: 0.5rem;
+  --ctx-menu-hover-bg: #bbbbbb;
+  --ctx-menu-font-size: 0.9rem;
+  --ctx-menu-padding: 0.375rem 0.5rem;
+}
 ```
 
 More variables can be found by inspecting the rendered context menu.
 
 ### Individual Styling
-All `svelte-contextmenu` classes may be appended to or replaced entirely via the `Settings` class.
+`svelte-contextmenu` comes with default CSS classes, and they may be appended to or replaced entirely via the `Settings` class.
 
 ```svelte
-  <script>
-    import ContextMenu, { Item, Divider, Settings } from "svelte-contextmenu";
+<script>
+  import ContextMenu, { Item, Divider, Settings } from "svelte-contextmenu";
 
-    const boldSettings = new Settings();
-    boldSettings.Item.Class.push("fw-bold");
-  </script>
+  // Use default CSS class names *without* styling
+  const boldSettings = new Settings();
 
-  <ContextMenu bind:this={boldMenu} settings={boldSettings}>
+  /* Alternative 1: Build off of default styling 
+   * const boldSettings = Settings.DefaultCSS();
+   */
+
+  /* Alternative 2: Build off of Bootstrap styling 
+   * const boldSettings = Settings.BootstrapCss();
+   */
+
+  boldSettings.Item.Class.push("fw-bold");
+</script>
+
+<ContextMenu bind:this={boldMenu} settings={boldSettings}>
 ```
 
 ### Global Styling
+In the above example, settings were created and applied to a single instance. However,
+settings can also be set globally using the `defaultSettings` store.
+
 ```svelte
-  <script>
-    import ContextMenu, { defaultSettings, Settings } from "svelte-contextmenu";
+<script>
+  import ContextMenu, { defaultSettings, Settings } from "svelte-contextmenu";
 
-    const boldSettings = new Settings();
-    boldSettings.ItemContent.Class.push("fw-bold");
+  const boldSettings = new Settings();
+  boldSettings.ItemContent.Class.push("fw-bold");
 
-    // Set global styles to `boldSettings`
-    defaultSettings.set(boldSettings);
-  </script>
+  // Set global styles to `boldSettings`
+  defaultSettings.set(boldSettings);
+</script>
 ```
 
-#### Bootstrap Styling
+#### Bootstrap Styling: A shorthand
+`svelte-contextmenu` contains a simple `useBootstrap()` function that may be called at
+the top of your app to make the menu use Bootstrap 5 classes everywhere.
+
 ```svelte
-  <script>
-    import ContextMenu, { useBootstrap } from "svelte-contextmenu";
+<script>
+  import ContextMenu, { useBootstrap } from "svelte-contextmenu";
 
-    const boldSettings = new Settings();
-    boldSettings.ItemContent.Class.push("fw-bold");
-
-    // Use Bootstrap 5 classes globally
-    useBootstrap();
-  </script>
+  // Use Bootstrap 5 classes globally
+  useBootstrap();
+</script>
 ```

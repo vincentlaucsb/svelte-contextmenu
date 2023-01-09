@@ -9,7 +9,6 @@ const CLOSE_LISTENERS = {
 };
 import { onDestroy, onMount, setContext } from "svelte";
 import { writable } from "svelte/store";
-import Settings from "./Settings";
 import { createStyleString, findParentWithScroll } from "./utilities";
 import { currentMenu, defaultSettings } from "./stores";
 import { computeMenuStyle, getMenuClass } from "./menuUtilities";
@@ -129,6 +128,7 @@ onDestroy(() => {
     background-color: var(--ctx-menu-background, #eeeeee);
     border: var(--ctx-menu-border, 1px solid #aaaaaa);
     border-radius: var(--ctx-menu-border-radius, 0.25rem);
+    font-size: var(--ctx-menu-font-size, inherit);
     margin: 0;
     padding: var(--ctx-menu-padding, 0.25rem 0);
     display: none;
