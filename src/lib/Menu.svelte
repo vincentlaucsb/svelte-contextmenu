@@ -12,6 +12,7 @@
   };
 
   import { onDestroy, onMount, setContext } from "svelte";
+  import { createEventDispatcher } from 'svelte';
   import { writable } from "svelte/store";
 
   import type { ContextMenuMouseEvent } from "./ContextMenuMouseEvent";
@@ -24,6 +25,7 @@
   /** Menu Settings */
   export let settings: Settings = null;
   const finalSettings = writable(settings || $defaultSettings);
+  const dispatch = createEventDispatcher();
 
   $: {
     // Update settings on change
@@ -79,6 +81,8 @@
       currentParentContainer.removeEventListener("scroll", close);
       currentParentContainer = null;
     }
+
+    dispatch('close', e);
   }
 
   /**
