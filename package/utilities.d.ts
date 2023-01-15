@@ -11,3 +11,5 @@ export declare function createStyleString(style: {
  * @returns
  */
 export declare function findParentWithScroll(clickEvent: ContextMenuMouseEvent): HTMLElement | null;
+/** Returns document element for event target string */
+export declare function assignEventTarget(targetString: String): HTMLElement | null;
