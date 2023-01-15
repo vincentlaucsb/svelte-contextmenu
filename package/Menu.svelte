@@ -2,15 +2,10 @@
  * Once a menu has been made visible, these events will trigger
  * the close() function
  */
-const CLOSE_LISTENERS = {
-    "click": document.body,
-    "contextmenu": document.body,
-    "scroll": document
-};
 import { onDestroy, onMount, setContext } from "svelte";
-import { writable } from "svelte/store";
-import { createStyleString, findParentWithScroll } from "./utilities";
-import { currentMenu, defaultSettings } from "./stores";
+import { get, writable } from "svelte/store";
+import { createStyleString, findParentWithScroll, assignEventTarget } from "./utilities";
+import { currentMenu, defaultSettings, CLOSE_LISTENERS } from "./stores";
 import { computeMenuStyle, getMenuClass } from "./menuUtilities";
 /** Menu Settings */
 export let settings = null;
@@ -54,7 +49,7 @@ function close(e) {
         return;
     menuPosition = null;
     Object.keys(CLOSE_LISTENERS).forEach((eventName) => {
-        const target = CLOSE_LISTENERS[eventName];
+        const target = assignEventTarget(get(CLOSE_LISTENERS)[eventName]);
         target.removeEventListener(eventName, close);
     });
     if (currentParentContainer !== null) {
@@ -90,7 +85,7 @@ export function show(clickEvent) {
     clickEvent.preventDefault();
     currentMenu.set(ref);
     Object.keys(CLOSE_LISTENERS).forEach((eventName) => {
-        const target = CLOSE_LISTENERS[eventName];
+        const target = assignEventTarget(get(CLOSE_LISTENERS)[eventName]);
         target.addEventListener(eventName, close);
     });
     // If a parent container w/ custom scrolling exists, then 

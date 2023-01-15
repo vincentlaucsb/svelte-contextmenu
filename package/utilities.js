@@ -28,3 +28,14 @@ export function findParentWithScroll(clickEvent) {
     }
     return null;
 }
+/** Returns document element for event target string */
+export function assignEventTarget(targetString) {
+	switch (targetString) {
+		case "document.body":
+			return document.body;
+		case "document":
+			return document;
+		default:
+			break;
+	}
+}
